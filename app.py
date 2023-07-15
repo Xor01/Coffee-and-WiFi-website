@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, redirect, url_for
 from flask_bootstrap import Bootstrap5
 from cafeform import CafeForm
 import csv
@@ -28,11 +28,21 @@ def home():
 def add_cafe():
     form = CafeForm()
     if form.validate_on_submit():
-        print("True")
+        append_to_csv(form.data)
+        return redirect(url_for('cafes'))
     # Exercise:
     # Make the form write a new row into cafe-data.csv
     # with if form.validate_on_submit()
     return render_template('add.html', form=form)
+
+
+def append_to_csv(cafe_list):
+    with open('cafe-data.csv', encoding='utf-8', newline='', mode='a') as db:
+        csv_data = csv.writer(db, delimiter=',')
+        # remove submit status and CSRF token
+        cafe_list.popitem()
+        cafe_list.popitem()
+        csv_data.writerow(cafe_list.values())
 
 
 @app.route('/cafes')
