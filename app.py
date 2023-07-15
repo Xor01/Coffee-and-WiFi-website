@@ -1,19 +1,12 @@
 from flask import Flask, render_template
 from flask_bootstrap import Bootstrap5
-from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField
-from wtforms.validators import DataRequired
+from cafeform import CafeForm
 import csv
 from dotenv import load_dotenv
 from os import getenv
 app = Flask(__name__)
 app.secret_key = getenv('SECRET_KEY')
 Bootstrap5(app)
-
-
-class CafeForm(FlaskForm):
-    cafe = StringField('Cafe name', validators=[DataRequired()])
-    submit = SubmitField('Submit')
 
 
 # Exercise:
